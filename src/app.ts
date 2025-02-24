@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req: Request, res: Response) => {
   res.send({
-    message: "Setup Server...",
+    message: "Verv 2.0 server is running",
   });
 });
 
