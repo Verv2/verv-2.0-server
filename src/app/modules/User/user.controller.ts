@@ -5,8 +5,11 @@ import httpStatus from "http-status";
 import sendResponse from "../../../shared/sendResponse";
 
 // request and response are handled by controller
-const createAdmin = catchAsync(async (req: Request, res: Response) => {
-  const result = await userService.createAdmin();
+const registerUser = catchAsync(async (req: Request, res: Response) => {
+  const user = req.body;
+
+  const result = await userService.createAdmin(user);
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -16,5 +19,5 @@ const createAdmin = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const userController = {
-  createAdmin,
+  registerUser,
 };
