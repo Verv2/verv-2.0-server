@@ -8,13 +8,15 @@ import sendResponse from "../../../shared/sendResponse";
 const registerUser = catchAsync(async (req: Request, res: Response) => {
   const user = req.body;
 
-  const result = await userService.createAdmin(user);
+  const result = await userService.registerUserIntoDB(user);
+
+  const userWithEmptyPassword = { ...result, password: "" };
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Admin Created successfully!",
-    data: result,
+    message: "User is created successfully!",
+    data: userWithEmptyPassword,
   });
 });
 
