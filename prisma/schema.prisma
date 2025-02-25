@@ -14,12 +14,14 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  role      UserRole
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String     @id @default(uuid())
+  email            String     @unique
+  password         String
+  role             UserRole
+  isProfileUpdated Boolean    @default(true)
+  status           UserStatus @default(ACTIVE)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 
   @@map("users")
 }
@@ -29,4 +31,10 @@ enum UserRole {
   ADMIN
   LANDLORD
   TENANT
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+  DELETED
 }
