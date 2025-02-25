@@ -6,8 +6,6 @@ import * as bcrypt from "bcrypt";
 import httpStatus from "http-status";
 
 const registerUserIntoDB = async (payload: TUser) => {
-  console.log("request has been sent from controller", payload);
-
   // check if the user already exists
   const existingUser = await prisma.user.findUnique({
     where: { email: payload.email },
