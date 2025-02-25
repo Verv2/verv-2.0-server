@@ -18,7 +18,7 @@ model User {
   email            String     @unique
   password         String
   role             UserRole
-  isProfileUpdated Boolean    @default(true)
+  isProfileUpdated Boolean    @default(false)
   status           UserStatus @default(ACTIVE)
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt

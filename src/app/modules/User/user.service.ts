@@ -1,10 +1,21 @@
 import config from "../../../config";
 import prisma from "../../../shared/prisma";
+import ApiError from "../../errors/ApiErrors";
 import { TUser } from "./user.interface";
 import * as bcrypt from "bcrypt";
+import httpStatus from "http-status";
 
 const registerUserIntoDB = async (payload: TUser) => {
   console.log("request has been sent from controller", payload);
+
+  // check if the user already exists
+  const existingUser = await prisma.user.findUnique({
+    where: { email: payload.email },
+  });
+
+  if (existingUser) {
+    throw new ApiError(httpStatus.CONFLICT, "User already exists");
+  }
 
   const hashedPassword: string = await bcrypt.hash(
     payload.password,
