@@ -14,14 +14,15 @@ datasource db {
 }
 
 model User {
-  id               String     @id @default(uuid())
-  email            String     @unique
-  password         String
-  role             UserRole
-  isProfileUpdated Boolean    @default(false)
-  status           UserStatus @default(ACTIVE)
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
+  id                String     @id @default(uuid())
+  email             String     @unique
+  password          String
+  role              UserRole
+  isProfileUpdated  Boolean    @default(false)
+  status            UserStatus @default(ACTIVE)
+  passwordChangedAt DateTime   @default(now())
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
 
   @@map("users")
 }
