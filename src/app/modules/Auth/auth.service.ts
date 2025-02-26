@@ -74,15 +74,15 @@ const refreshToken = async (token: string) => {
     throw new ApiError(httpStatus.CONFLICT, "This user is not found ");
   }
 
-  if (
-    userData.passwordChangedAt &&
-    isJWTIssuedBeforePasswordChanged(
-      userData.passwordChangedAt,
-      decodedData.iat as number
-    )
-  ) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, "You are not authorized !");
-  }
+  //   if (
+  //     userData.passwordChangedAt &&
+  //     isJWTIssuedBeforePasswordChanged(
+  //       userData.passwordChangedAt,
+  //       decodedData.iat as number
+  //     )
+  //   ) {
+  //     throw new ApiError(httpStatus.UNAUTHORIZED, "You are not authorized !");
+  //   }
 
   const accessToken = jwtHelpers.generateToken(
     {
