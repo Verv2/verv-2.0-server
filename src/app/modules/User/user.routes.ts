@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { userController } from "./user.controller";
 import { userValidation } from "./user.validation";
 import validateRequest from "../../middlewares/validateRequest";
@@ -15,7 +15,11 @@ router.post(
 router.post(
   "/create-profile",
   multerUpload.single("image"),
-  // validateRequest(userValidation.userValidationSchema),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
+  validateRequest(userValidation.userProfileValidationSchema),
   userController.createUserProfile
 );
 
