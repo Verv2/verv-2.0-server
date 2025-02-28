@@ -1,3 +1,4 @@
+import { Request } from "express";
 import config from "../../../config";
 import prisma from "../../../shared/prisma";
 import ApiError from "../../errors/ApiErrors";
@@ -33,7 +34,8 @@ const registerUserIntoDB = async (payload: TUser) => {
   return result;
 };
 
-const createUserProfileIntoDB = async () => {
+const createUserProfileIntoDB = async (req: Request) => {
+  console.log(req.body);
   console.log("User Profile");
 };
 
