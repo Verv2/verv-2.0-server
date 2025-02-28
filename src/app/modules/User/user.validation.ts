@@ -15,6 +15,22 @@ const userValidationSchema = z.object({
   }),
 });
 
+const userProfileValidationSchema = z.object({
+  body: z.object({
+    firstName: z.string({
+      required_error: "First Name is required",
+    }),
+    lastName: z.string({
+      required_error: "Last Name is required",
+    }),
+
+    phoneNumber: z.string({
+      required_error: "Phone Number is required",
+    }),
+  }),
+});
+
 export const userValidation = {
   userValidationSchema,
+  userProfileValidationSchema,
 };

@@ -20,6 +20,22 @@ const registerUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const createUserProfile = catchAsync(async (req: Request, res: Response) => {
+  // const user = req.body;
+
+  const result = await userService.createUserProfileIntoDB();
+
+  // const userWithEmptyPassword = { ...result, password: "" };
+
+  // sendResponse(res, {
+  //   statusCode: httpStatus.OK,
+  //   success: true,
+  //   message: "User is created successfully!",
+  //   data: userWithEmptyPassword,
+  // });
+});
+
 export const userController = {
   registerUser,
+  createUserProfile,
 };

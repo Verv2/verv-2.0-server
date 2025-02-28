@@ -33,6 +33,11 @@ const registerUserIntoDB = async (payload: TUser) => {
   return result;
 };
 
+const createUserProfileIntoDB = async () => {
+  console.log("User Profile");
+};
+
 export const userService = {
   registerUserIntoDB,
+  createUserProfileIntoDB,
 };
