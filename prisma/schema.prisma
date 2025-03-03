@@ -32,9 +32,9 @@ model User {
 
 model Landlord {
   id           String   @id @default(uuid())
+  email        String   @unique
   firstName    String
   lastName     String
-  email        String   @unique
   phoneNumber  String
   profilePhoto String?
   isDeleted    Boolean  @default(false)

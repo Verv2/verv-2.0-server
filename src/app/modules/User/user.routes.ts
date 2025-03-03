@@ -3,6 +3,8 @@ import { userController } from "./user.controller";
 import { userValidation } from "./user.validation";
 import validateRequest from "../../middlewares/validateRequest";
 import { multerUpload } from "../../../config/multer.config";
+import { UserRole } from "@prisma/client";
+import auth from "../../middlewares/auth";
 
 const router = express.Router();
 
@@ -14,6 +16,12 @@ router.post(
 
 router.post(
   "/create-profile",
+  auth(
+    UserRole.SUPER_ADMIN,
+    UserRole.ADMIN,
+    UserRole.LANDLORD,
+    UserRole.TENANT
+  ),
   multerUpload.single("image"),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);

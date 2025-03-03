@@ -21,8 +21,8 @@ const registerUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 const createUserProfile = catchAsync(async (req: Request, res: Response) => {
-  console.log("From controller", req.body.data);
-  console.log("From controller", req.file);
+  // console.log("From controller", req.body);
+  // console.log("From controller", req.file);
   const result = await userService.createUserProfileIntoDB(req);
 
   sendResponse(res, {

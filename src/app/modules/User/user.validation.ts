@@ -17,6 +17,9 @@ const userValidationSchema = z.object({
 
 const userProfileValidationSchema = z.object({
   body: z.object({
+    // email: z.string({
+    //   required_error: "Email is required!",
+    // }),
     firstName: z.string({
       required_error: "First Name is required",
     }),
@@ -27,6 +30,9 @@ const userProfileValidationSchema = z.object({
     phoneNumber: z.string({
       required_error: "Phone Number is required",
     }),
+    // role: z.nativeEnum(UserRole, {
+    //   required_error: "Role is required",
+    // }),
   }),
 });
 

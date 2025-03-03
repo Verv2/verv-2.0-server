@@ -5,6 +5,7 @@ import ApiError from "../../errors/ApiErrors";
 import { TUser } from "./user.interface";
 import * as bcrypt from "bcrypt";
 import httpStatus from "http-status";
+import { IAuthUser } from "../../interfaces/common";
 
 const registerUserIntoDB = async (payload: TUser) => {
   // check if the user already exists
@@ -34,9 +35,48 @@ const registerUserIntoDB = async (payload: TUser) => {
   return result;
 };
 
-const createUserProfileIntoDB = async (req: Request) => {
-  console.log(req.body);
-  console.log("User Profile");
+const createUserProfileIntoDB = async (req: Request & { user?: IAuthUser }) => {
+  console.log("user", req.user);
+  console.log("from service data", req.body);
+  console.log("from service file", req.file);
+
+  const userProfileData = {
+    email: req?.user?.email as string,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    phoneNumber: req.body.phoneNumber,
+    profilePhoto: req?.file?.path,
+  };
+
+  console.log(userProfileData);
+
+  const result = await prisma.$transaction(async (tx) => {
+    let createdData;
+    if (req?.user?.role === "TENANT") {
+      createdData = await tx.tenant.create({
+        data: userProfileData,
+      });
+
+      return createdData;
+    } else if (req?.user?.role === "LANDLORD") {
+      createdData = await tx.landlord.create({
+        data: userProfileData,
+      });
+
+      if (req?.file?.path) {
+        await tx.user.update({
+          where: {
+            email: req?.user?.email,
+          },
+          data: {
+            isProfileUpdated: false,
+          },
+        });
+      }
+
+      return createdData;
+    }
+  });
 };
 
 export const userService = {
