@@ -71,11 +71,7 @@ const createUserProfileIntoDB = async (req: Request & { user?: IAuthUser }) => {
       });
     }
 
-    console.log("From req.file", req.file?.path);
-    console.log("userProfileData", userProfileData.profilePhoto);
-
     if (req.file?.path) {
-      console.log("From req.file");
       await tx.user.update({
         where: {
           email: req.user?.email,
