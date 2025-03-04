@@ -41,7 +41,8 @@ model Landlord {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  user User @relation(fields: [email], references: [email])
+  user            User              @relation(fields: [email], references: [email])
+  propertyListing PropertyListing[]
 
   @@map("landlord")
 }
@@ -76,6 +77,21 @@ model Admin {
   user User @relation(fields: [email], references: [email])
 
   @@map("admin")
+}
+
+model PropertyListing {
+  id           String   @id @default(uuid())
+  propertyName String
+  title        String
+  price        Float
+  images       String[]
+  landlordId   String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  landlord Landlord @relation(fields: [landlordId], references: [id])
+
+  @@map("propertyListing")
 }
 
 enum UserRole {
