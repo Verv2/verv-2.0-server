@@ -36,47 +36,62 @@ const registerUserIntoDB = async (payload: TUser) => {
 };
 
 const createUserProfileIntoDB = async (req: Request & { user?: IAuthUser }) => {
-  console.log("user", req.user);
-  console.log("from service data", req.body);
-  console.log("from service file", req.file);
+  if (!req.user) {
+    throw new Error("User information is missing.");
+  }
 
   const userProfileData = {
-    email: req?.user?.email as string,
+    email: req.user.email,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     phoneNumber: req.body.phoneNumber,
-    profilePhoto: req?.file?.path,
+    profilePhoto: req.file?.path || "",
   };
 
   console.log(userProfileData);
 
   const result = await prisma.$transaction(async (tx) => {
     let createdData;
-    if (req?.user?.role === "TENANT") {
+
+    if (req.user?.role === "TENANT") {
       createdData = await tx.tenant.create({
         data: userProfileData,
       });
+    }
 
-      return createdData;
-    } else if (req?.user?.role === "LANDLORD") {
+    if (req.user?.role === "LANDLORD") {
       createdData = await tx.landlord.create({
         data: userProfileData,
       });
-
-      if (req?.file?.path) {
-        await tx.user.update({
-          where: {
-            email: req?.user?.email,
-          },
-          data: {
-            isProfileUpdated: false,
-          },
-        });
-      }
-
-      return createdData;
     }
+
+    if (req.user?.role === "ADMIN") {
+      createdData = await tx.admin.create({
+        data: userProfileData,
+      });
+    }
+
+    console.log("From req.file", req.file?.path);
+    console.log("userProfileData", userProfileData.profilePhoto);
+
+    if (req.file?.path) {
+      console.log("From req.file");
+      await tx.user.update({
+        where: {
+          email: req.user?.email,
+        },
+        data: {
+          isProfileUpdated: true,
+        },
+      });
+    }
+
+    return createdData;
   });
+
+  console.log(result);
+
+  return result;
 };
 
 export const userService = {
