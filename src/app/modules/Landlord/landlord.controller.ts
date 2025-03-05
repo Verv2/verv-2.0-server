@@ -13,11 +13,12 @@ const addProperty = catchAsync(
       throw new ApiError(httpStatus.BAD_REQUEST, "Please upload an image");
     }
 
-    const user = req.user;
     const images = req.files;
-    const body = req.body;
-
-    const payload = { ...user, ...body };
+    const payload = {
+      landlordId: req.user?.userId,
+      email: req.user?.email,
+      ...req.body,
+    };
 
     const result = await LandlordService.addPropertyIntoDB(
       payload,
@@ -28,7 +29,7 @@ const addProperty = catchAsync(
       statusCode: httpStatus.OK,
       success: true,
       message: "Property is added successfully",
-      data: {},
+      data: result,
     });
   }
 );

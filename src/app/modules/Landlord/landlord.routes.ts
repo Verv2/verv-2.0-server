@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { LandlordController } from "./landlord.controller";
 import { multerUpload } from "../../../config/multer.config";
 import auth from "../../middlewares/auth";
@@ -10,6 +10,10 @@ router.post(
   "/add-property",
   auth(UserRole.LANDLORD),
   multerUpload.fields([{ name: "propertyImages" }]),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
   LandlordController.addProperty
 );
 

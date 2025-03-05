@@ -1,4 +1,7 @@
 export type TProperty = {
+  landlordId: string;
+  email: string;
+  role: "LANDLORD";
   propertyOption:
     | "Whole property"
     | "Individual rooms"
@@ -8,12 +11,13 @@ export type TProperty = {
   houseNumber: string;
   address: string;
   address2?: string;
-  propertyType: "Flat" | "Bedsit";
+  propertyType: "FLAT" | "BEDSIT";
   bedrooms: number;
   bathrooms: number;
-  furnishingOptions: "Furnished" | "Unfurnished" | "Choice";
+  furnishingOptions: "FURNISHED" | "UNFURNISHED" | "CHOICE";
   town: string;
   description: string;
+  propertyImages?: string[];
   remoteVideoViewing: boolean;
   viewingDescription?: string;
   youtubeUrl?: string;

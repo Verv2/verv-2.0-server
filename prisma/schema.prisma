@@ -83,14 +83,27 @@ model Admin {
 }
 
 model PropertyListing {
-  id           String   @id @default(uuid())
-  propertyName String
-  title        String
-  price        Float
-  images       String[]
-  landlordId   String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                 String            @id @default(uuid())
+  email              String
+  propertyOption     String
+  postcode           String
+  houseNumber        String
+  address            String
+  address2           String?
+  propertyType       PropertyType
+  bedrooms           Int
+  bathrooms          Int
+  furnishingOptions  FurnishingOptions
+  town               String
+  description        String
+  propertyImages     String[]
+  remoteVideoViewing Boolean
+  viewingDescription String?
+  youtubeUrl         String?
+  termsAgreed        Boolean
+  landlordId         String
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
 
   landlord Landlord @relation(fields: [landlordId], references: [id])
 
@@ -108,4 +121,21 @@ enum UserStatus {
   ACTIVE
   BLOCKED
   DELETED
+}
+
+// enum PropertyOption {
+//   WHOLE_PROPERTY
+//   INDIVIDUAL_ROOMS
+//   EITHER
+// }
+
+enum PropertyType {
+  FLAT
+  BEDSIT
+}
+
+enum FurnishingOptions {
+  FURNISHED
+  UNFURNISHED
+  CHOICE
 }
