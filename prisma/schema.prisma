@@ -107,7 +107,7 @@ model PropertyListing {
 
   landlord Landlord @relation(fields: [landlordId], references: [id])
 
-  @@map("propertyListing")
+  @@map("property_listing")
 }
 
 enum UserRole {
