@@ -1,18 +1,23 @@
 export type TProperty = {
-  title: string;
+  propertyOption:
+    | "Whole property"
+    | "Individual rooms"
+    | "Either whole property or individual rooms";
+
+  postcode: string;
+  houseNumber: string;
+  address: string;
+  address2?: string;
+  propertyType: "Flat" | "Bedsit";
+  bedrooms: number;
+  bathrooms: number;
+  furnishingOptions: "Furnished" | "Unfurnished" | "Choice";
+  town: string;
   description: string;
-  images?: string[];
-  // city: District;
-  // location: string;
-  // dateFound: Date;
-  // status: keyof typeof ITEM_STATUS;
-  // isReported?: boolean;
-  // reportCount?: number;
-  // user: ObjectId;
-  // category: ObjectId;
-  // questions?: string[];
-  // createdAt?: Date;
-  // updatedAt?: Date;
+  remoteVideoViewing: boolean;
+  viewingDescription?: string;
+  youtubeUrl?: string;
+  termsAgreed: boolean;
 };
 
 export type TImageFile = {
