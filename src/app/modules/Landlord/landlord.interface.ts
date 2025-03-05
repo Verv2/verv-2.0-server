@@ -25,4 +25,13 @@ export type TImageFile = {
   filename: string;
 };
 
+export type TPropertyPayload = {
+  userId: string;
+  email: string;
+  role: "LANDLORD";
+  iat: number;
+  exp: number;
+  data: TProperty;
+};
+
 export type TImageFiles = { [fieldname: string]: Express.Multer.File[] };

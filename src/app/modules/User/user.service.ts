@@ -41,6 +41,7 @@ const createUserProfileIntoDB = async (req: Request & { user?: IAuthUser }) => {
   }
 
   const userProfileData = {
+    userId: req.user.userId,
     email: req.user.email,
     firstName: req.body.firstName,
     lastName: req.body.lastName,

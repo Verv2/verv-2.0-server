@@ -6,7 +6,6 @@ import * as bcrypt from "bcrypt";
 import { jwtHelpers } from "../../../helpers/jwtHelpers";
 import config from "../../../config";
 import { Secret } from "jsonwebtoken";
-import { isJWTIssuedBeforePasswordChanged } from "./auth.utils";
 
 const loginUser = async (payload: { email: string; password: string }) => {
   const userData = await prisma.user.findUnique({
@@ -28,20 +27,21 @@ const loginUser = async (payload: { email: string; password: string }) => {
   if (!isCorrectPassword) {
     throw new Error("Password incorrect!");
   }
+
+  const dataForToken = {
+    userId: userData.id,
+    email: userData.email,
+    role: userData.role,
+  };
+
   const accessToken = jwtHelpers.generateToken(
-    {
-      email: userData.email,
-      role: userData.role,
-    },
+    dataForToken,
     config.jwt.jwt_secret as string,
     config.jwt.expires_in as string
   );
 
   const refreshToken = jwtHelpers.generateToken(
-    {
-      email: userData.email,
-      role: userData.role,
-    },
+    dataForToken,
     config.jwt.refresh_token_secret as string,
     config.jwt.refresh_token_expires_in as string
   );
@@ -74,21 +74,14 @@ const refreshToken = async (token: string) => {
     throw new ApiError(httpStatus.CONFLICT, "This user is not found ");
   }
 
-  //   if (
-  //     userData.passwordChangedAt &&
-  //     isJWTIssuedBeforePasswordChanged(
-  //       userData.passwordChangedAt,
-  //       decodedData.iat as number
-  //     )
-  //   ) {
-  //     throw new ApiError(httpStatus.UNAUTHORIZED, "You are not authorized !");
-  //   }
+  const dataForToken = {
+    userId: userData.id,
+    email: userData.email,
+    role: userData.role,
+  };
 
   const accessToken = jwtHelpers.generateToken(
-    {
-      email: userData.email,
-      role: userData.role,
-    },
+    dataForToken,
     config.jwt.jwt_secret as Secret,
     config.jwt.expires_in as string
   );

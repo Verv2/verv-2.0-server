@@ -32,5 +32,3 @@ router.post(
 );
 
 export const UserRoutes = router;
-
-// mutlterUpload.fields
