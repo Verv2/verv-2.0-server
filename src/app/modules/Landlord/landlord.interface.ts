@@ -43,4 +43,10 @@ export type TPropertyPayload = {
   data: TProperty;
 };
 
+export type TLandlordUser = {
+  userId: string;
+  email: string;
+  role: "LANDLORD";
+};
+
 export type TImageFiles = { [fieldname: string]: Express.Multer.File[] };

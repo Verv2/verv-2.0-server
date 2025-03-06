@@ -4,7 +4,7 @@ import { LandlordService } from "./landlord.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
 import ApiError from "../../errors/ApiErrors";
-import { TImageFiles } from "./landlord.interface";
+import { TImageFiles, TLandlordUser } from "./landlord.interface";
 import { IAuthUser } from "../../interfaces/common";
 
 const addProperty = catchAsync(
@@ -13,15 +13,12 @@ const addProperty = catchAsync(
       throw new ApiError(httpStatus.BAD_REQUEST, "Please upload an image");
     }
 
+    const user = req.user;
     const images = req.files;
-    const payload = {
-      landlordId: req.user?.userId,
-      email: req.user?.email,
-      ...req.body,
-    };
 
     const result = await LandlordService.addPropertyIntoDB(
-      payload,
+      user as TLandlordUser,
+      req.body,
       images as TImageFiles
     );
 
