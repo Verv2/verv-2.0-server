@@ -21,6 +21,24 @@ export type TProperty = {
   remoteVideoViewing: boolean;
   viewingDescription?: string;
   youtubeUrl?: string;
+
+  monthlyRent: number;
+  minimumTenancy: number;
+  weeklyRent: number;
+  maximumTenancy: number;
+  depositAmount: number;
+
+  billsIncluded: boolean;
+  gardenAccess: boolean;
+  parking: boolean;
+  fireplace: boolean;
+
+  studentAllowed: boolean;
+  familiesAllowed: boolean;
+  dssIncomeAccepted: boolean;
+  petsAllowed: boolean;
+  smokersAllowed: boolean;
+
   termsAgreed: boolean;
 };
 
