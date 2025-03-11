@@ -50,6 +50,7 @@ const getListingAllFromDB = async (
       options.sortBy && options.sortOrder
         ? { [options.sortBy]: options.sortOrder }
         : { createdAt: "desc" },
+    include: { landlord: true },
   });
 
   const total = await prisma.propertyListing.count({
@@ -72,6 +73,9 @@ const getListingByIdFromDB = async (
   const result = await prisma.propertyListing.findUnique({
     where: {
       id,
+    },
+    include: {
+      landlord: true,
     },
   });
   return result;
