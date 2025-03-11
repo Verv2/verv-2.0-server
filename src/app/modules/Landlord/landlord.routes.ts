@@ -6,6 +6,12 @@ import { UserRole } from "@prisma/client";
 
 const router = express.Router();
 
+router.get(
+  "/all-property",
+  auth(UserRole.TENANT, UserRole.LANDLORD, UserRole.ADMIN),
+  LandlordController.getAllFromDB
+);
+
 router.post(
   "/add-property",
   auth(UserRole.LANDLORD),
