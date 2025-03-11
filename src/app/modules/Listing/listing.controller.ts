@@ -32,7 +32,19 @@ const getListingById = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const deleteListing = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await ListingService.deleteListingFromDB(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Listing deleted successfully",
+    data: result,
+  });
+});
+
 export const ListingController = {
   getAllFromDB,
   getListingById,
+  deleteListing,
 };

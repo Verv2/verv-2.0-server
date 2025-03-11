@@ -77,7 +77,17 @@ const getListingByIdFromDB = async (
   return result;
 };
 
+const deleteListingFromDB = async (id: string): Promise<PropertyListing> => {
+  const result = await prisma.propertyListing.delete({
+    where: {
+      id,
+    },
+  });
+  return result;
+};
+
 export const ListingService = {
   getListingAllFromDB,
   getListingByIdFromDB,
+  deleteListingFromDB,
 };
