@@ -55,18 +55,51 @@ const createUserProfileIntoDB = async (req: Request & { user?: IAuthUser }) => {
     let createdData;
 
     if (req.user?.role === "TENANT") {
+      const existingTenant = await prisma.tenant.findUnique({
+        where: { userId: req.user?.userId },
+      });
+
+      if (existingTenant) {
+        throw new ApiError(
+          httpStatus.CONFLICT,
+          "Tenant profile has already created"
+        );
+      }
+
       createdData = await tx.tenant.create({
         data: userProfileData,
       });
     }
 
     if (req.user?.role === "LANDLORD") {
+      const existingLandlord = await prisma.landlord.findUnique({
+        where: { userId: req.user?.userId },
+      });
+
+      if (existingLandlord) {
+        throw new ApiError(
+          httpStatus.CONFLICT,
+          "Landlord profile has already created"
+        );
+      }
+
       createdData = await tx.landlord.create({
         data: userProfileData,
       });
     }
 
     if (req.user?.role === "ADMIN") {
+      const existingAdmin = await prisma.admin.findUnique({
+        where: { userId: req.user?.userId },
+      });
+
+      if (existingAdmin) {
+        throw new ApiError(
+          httpStatus.CONFLICT,
+          "Admin profile has already created"
+        );
+      }
+
       createdData = await tx.admin.create({
         data: userProfileData,
       });

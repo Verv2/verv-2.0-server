@@ -8,6 +8,18 @@ const addPropertyIntoDB = async (
   payload: TProperty,
   images: TImageFiles
 ) => {
+  const existingUser = await prisma.user.findUnique({
+    where: { id: user?.userId },
+  });
+
+  if (!existingUser) {
+    throw new ApiError(httpStatus.CONFLICT, "User doesn't exist");
+  }
+
+  if (!existingUser.isProfileUpdated) {
+    throw new ApiError(httpStatus.CONFLICT, "Profile is not updated");
+  }
+
   const existingLandlord = await prisma.landlord.findUnique({
     where: { userId: user?.userId },
   });

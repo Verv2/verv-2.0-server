@@ -21,12 +21,14 @@ export type TProperty = {
   remoteVideoViewing: boolean;
   viewingDescription?: string;
   youtubeUrl?: string;
+  sellingOption: "RENT" | "SELL";
 
   monthlyRent: number;
   minimumTenancy: number;
   weeklyRent: number;
   maximumTenancy: number;
   depositAmount: number;
+  moveInDate: string;
 
   billsIncluded: boolean;
   gardenAccess: boolean;
