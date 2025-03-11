@@ -21,7 +21,7 @@ const moduleRoutes = [
     route: LandlordRoutes,
   },
   {
-    path: "/listing",
+    path: "/listings",
     route: ListingRoutes,
   },
 ];

@@ -1,10 +1,13 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, PropertyListing } from "@prisma/client";
 import { paginationHelper } from "../../../helpers/paginationHelper";
 import prisma from "../../../shared/prisma";
 import { IPaginationOptions } from "../../interfaces/pagination";
 import { listingSearchableFields } from "./listing.constant";
 
-const getAllFromDB = async (filters: any, options: IPaginationOptions) => {
+const getListingAllFromDB = async (
+  filters: any,
+  options: IPaginationOptions
+) => {
   const { limit, page, skip } = paginationHelper.calculatePagination(options);
   const { searchTerm, ...filterData } = filters;
 
@@ -63,6 +66,18 @@ const getAllFromDB = async (filters: any, options: IPaginationOptions) => {
   };
 };
 
+const getListingByIdFromDB = async (
+  id: string
+): Promise<PropertyListing | null> => {
+  const result = await prisma.propertyListing.findUnique({
+    where: {
+      id,
+    },
+  });
+  return result;
+};
+
 export const ListingService = {
-  getAllFromDB,
+  getListingAllFromDB,
+  getListingByIdFromDB,
 };
