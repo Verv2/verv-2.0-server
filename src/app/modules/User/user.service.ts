@@ -125,11 +125,41 @@ const createUserProfileIntoDB = async (req: Request & { user?: IAuthUser }) => {
 };
 
 const getAllUsersFromDB = async () => {
-  console.log("Get All user from user service");
+  const result = await prisma.user.findMany({
+    include: {
+      landlord: {
+        include: {
+          propertyListing: true,
+        },
+      },
+      tenant: true,
+    },
+  });
+
+  return result;
+};
+
+const getUserByIdFromDB = async (id: string) => {
+  const result = prisma.user.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      landlord: {
+        include: {
+          propertyListing: true,
+        },
+      },
+      tenant: true,
+    },
+  });
+
+  return result;
 };
 
 export const userService = {
   registerUserIntoDB,
   createUserProfileIntoDB,
   getAllUsersFromDB,
+  getUserByIdFromDB,
 };

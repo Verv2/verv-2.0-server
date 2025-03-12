@@ -42,8 +42,21 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getUserById = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await userService.getUserByIdFromDB(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User retrieval successful",
+    data: result,
+  });
+});
+
 export const userController = {
   registerUser,
   createUserProfile,
   getAllUsers,
+  getUserById,
 };

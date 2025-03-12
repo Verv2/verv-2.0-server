@@ -19,6 +19,17 @@ router.get(
   userController.getAllUsers
 );
 
+router.get(
+  "/:id",
+  auth(
+    UserRole.ADMIN,
+    UserRole.SUPER_ADMIN,
+    UserRole.LANDLORD,
+    UserRole.TENANT
+  ),
+  userController.getUserById
+);
+
 router.post(
   "/register-user",
   validateRequest(userValidation.userValidationSchema),
