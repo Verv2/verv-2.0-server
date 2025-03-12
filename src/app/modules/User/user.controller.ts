@@ -31,7 +31,19 @@ const createUserProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+  const result = await userService.getAllUsersFromDB();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Users retrieval successful",
+    data: result,
+  });
+});
+
 export const userController = {
   registerUser,
   createUserProfile,
+  getAllUsers,
 };

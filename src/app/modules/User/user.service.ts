@@ -124,7 +124,12 @@ const createUserProfileIntoDB = async (req: Request & { user?: IAuthUser }) => {
   return result;
 };
 
+const getAllUsersFromDB = async () => {
+  console.log("Get All user from user service");
+};
+
 export const userService = {
   registerUserIntoDB,
   createUserProfileIntoDB,
+  getAllUsersFromDB,
 };

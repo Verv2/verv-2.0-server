@@ -8,6 +8,17 @@ import auth from "../../middlewares/auth";
 
 const router = express.Router();
 
+router.get(
+  "/",
+  auth(
+    UserRole.ADMIN,
+    UserRole.SUPER_ADMIN,
+    UserRole.LANDLORD,
+    UserRole.TENANT
+  ),
+  userController.getAllUsers
+);
+
 router.post(
   "/register-user",
   validateRequest(userValidation.userValidationSchema),
