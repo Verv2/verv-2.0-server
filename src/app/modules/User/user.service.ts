@@ -6,6 +6,7 @@ import { TUser } from "./user.interface";
 import * as bcrypt from "bcrypt";
 import httpStatus from "http-status";
 import { IAuthUser } from "../../interfaces/common";
+import { User } from "@prisma/client";
 
 const registerUserIntoDB = async (payload: TUser) => {
   // check if the user already exists
@@ -139,7 +140,7 @@ const getAllUsersFromDB = async () => {
   return result;
 };
 
-const getUserByIdFromDB = async (id: string) => {
+const getUserByIdFromDB = async (id: string): Promise<User | null> => {
   const result = prisma.user.findUnique({
     where: {
       id,

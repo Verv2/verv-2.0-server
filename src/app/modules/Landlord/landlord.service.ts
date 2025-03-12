@@ -17,7 +17,7 @@ const addPropertyIntoDB = async (
   });
 
   if (!existingUser) {
-    throw new ApiError(httpStatus.CONFLICT, "User doesn't exist");
+    throw new ApiError(httpStatus.NOT_FOUND, "User doesn't exist");
   }
 
   if (!existingUser.isProfileUpdated) {
@@ -29,7 +29,7 @@ const addPropertyIntoDB = async (
   });
 
   if (!existingLandlord) {
-    throw new ApiError(httpStatus.CONFLICT, "Landlord doesn't exist");
+    throw new ApiError(httpStatus.NOT_FOUND, "Landlord doesn't exist");
   }
 
   const { propertyImages } = images;
