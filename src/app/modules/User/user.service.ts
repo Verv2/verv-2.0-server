@@ -134,6 +134,7 @@ const getAllUsersFromDB = async () => {
         },
       },
       tenant: true,
+      review: true,
     },
   });
 
@@ -152,6 +153,7 @@ const getUserByIdFromDB = async (id: string): Promise<User | null> => {
         },
       },
       tenant: true,
+      review: true,
     },
   });
 

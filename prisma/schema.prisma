@@ -20,7 +20,7 @@ model User {
   landlord          Landlord?
   tenant            Tenant?
   admin             Admin?
-  Review            Review[]
+  review            Review[]
 
   @@map("users")
 }
