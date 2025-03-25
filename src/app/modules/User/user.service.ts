@@ -47,10 +47,11 @@ const createUserProfileIntoDB = async (req: Request & { user?: IAuthUser }) => {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     phoneNumber: req.body.phoneNumber,
+    languages: req.body.languages,
     profilePhoto: req.file?.path || "",
   };
 
-  console.log(userProfileData);
+  // console.log("From User Service", userProfileData);
 
   const result = await prisma.$transaction(async (tx) => {
     let createdData;
