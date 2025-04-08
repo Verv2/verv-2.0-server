@@ -78,6 +78,17 @@ model Admin {
   @@map("admin")
 }
 
+model TemporaryProperty {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  step      Int
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("temporary_property")
+}
+
 model PropertyListing {
   id                 String            @id @default(uuid())
   landlordId         String

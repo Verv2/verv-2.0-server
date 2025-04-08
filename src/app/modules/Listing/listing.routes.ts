@@ -1,13 +1,25 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { ListingController } from "./listing.controller";
 import auth from "../../middlewares/auth";
 import { UserRole } from "@prisma/client";
+import { multerUpload } from "../../../config/multer.config";
 
 const router = express.Router();
 
 router.get("/", ListingController.getAllFromDB);
 
 router.get("/:id", ListingController.getListingById);
+
+router.post(
+  "/create-temporary-listing",
+  auth(UserRole.LANDLORD, UserRole.ADMIN),
+  multerUpload.fields([{ name: "propertyImages" }]),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
+  ListingController.createTemporaryListing
+);
 
 router.delete(
   "/:id",

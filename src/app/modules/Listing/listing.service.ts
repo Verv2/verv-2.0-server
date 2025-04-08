@@ -3,6 +3,48 @@ import { paginationHelper } from "../../../helpers/paginationHelper";
 import prisma from "../../../shared/prisma";
 import { IPaginationOptions } from "../../interfaces/pagination";
 import { listingSearchableFields } from "./listing.constant";
+import { TImageFiles } from "../Landlord/landlord.interface";
+
+const createTemporaryListingIntoDb = async (
+  payload: any,
+  userId: string,
+  images: TImageFiles
+) => {
+  const existingTemporary = await prisma.temporaryProperty.findUnique({
+    where: { userId },
+  });
+
+  const { propertyImages } = images;
+  const arrImages = propertyImages.map((image) => image.path);
+
+  console.log(propertyImages);
+
+  const mergedData = {
+    ...(typeof existingTemporary?.data === "object" &&
+    existingTemporary?.data !== null
+      ? existingTemporary.data
+      : {}),
+    ...payload,
+    propertyImages: arrImages,
+  };
+
+  console.log(mergedData);
+
+  const result = await prisma.temporaryProperty.upsert({
+    where: { userId },
+    update: {
+      data: mergedData,
+      step: payload.step,
+    },
+    create: {
+      userId,
+      data: mergedData,
+      step: payload.step,
+    },
+  });
+
+  return result;
+};
 
 const getListingAllFromDB = async (
   filters: any,
@@ -94,4 +136,5 @@ export const ListingService = {
   getListingAllFromDB,
   getListingByIdFromDB,
   deleteListingFromDB,
+  createTemporaryListingIntoDb,
 };

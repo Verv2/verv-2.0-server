@@ -5,6 +5,33 @@ import { ListingService } from "./listing.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
 import { listingFilterableFields } from "./listing.constant";
+import ApiError from "../../errors/ApiErrors";
+import { TImageFiles } from "../Landlord/landlord.interface";
+
+const createTemporaryListing = catchAsync(
+  async (req: Request & { user?: { userId: string } }, res: Response) => {
+    if (!req.files) {
+      throw new ApiError(httpStatus.BAD_REQUEST, "Please upload an image");
+    }
+
+    const data = req.body;
+    const userId = req.user?.userId;
+    const images = req.files;
+
+    const result = await ListingService.createTemporaryListingIntoDb(
+      data,
+      userId as string,
+      images as TImageFiles
+    );
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Temporary Listings created successfully",
+      data: result,
+    });
+  }
+);
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, listingFilterableFields);
@@ -44,6 +71,7 @@ const deleteListing = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const ListingController = {
+  createTemporaryListing,
   getAllFromDB,
   getListingById,
   deleteListing,
