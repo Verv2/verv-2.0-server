@@ -15,9 +15,10 @@ const createTemporaryListingIntoDb = async (
   });
 
   const { propertyImages } = images;
-  const arrImages = propertyImages.map((image) => image.path);
-
-  console.log(propertyImages);
+  let arrImages: string[] = [];
+  if (propertyImages) {
+    arrImages = propertyImages.map((image) => image.path);
+  }
 
   const mergedData = {
     ...(typeof existingTemporary?.data === "object" &&
@@ -41,6 +42,14 @@ const createTemporaryListingIntoDb = async (
       data: mergedData,
       step: payload.step,
     },
+  });
+
+  return result;
+};
+
+const getTemporaryListingFromDB = async (userId: string) => {
+  const result = await prisma.temporaryProperty.findUnique({
+    where: { userId },
   });
 
   return result;
@@ -137,4 +146,5 @@ export const ListingService = {
   getListingByIdFromDB,
   deleteListingFromDB,
   createTemporaryListingIntoDb,
+  getTemporaryListingFromDB,
 };

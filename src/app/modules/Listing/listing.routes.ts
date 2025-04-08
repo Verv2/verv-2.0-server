@@ -8,6 +8,12 @@ const router = express.Router();
 
 router.get("/", ListingController.getAllFromDB);
 
+router.get(
+  "/get-temporary-listing",
+  auth(UserRole.LANDLORD, UserRole.ADMIN),
+  ListingController.getTemporaryListing
+);
+
 router.get("/:id", ListingController.getListingById);
 
 router.post(

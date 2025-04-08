@@ -33,6 +33,23 @@ const createTemporaryListing = catchAsync(
   }
 );
 
+const getTemporaryListing = catchAsync(
+  async (req: Request & { user?: { userId: string } }, res: Response) => {
+    const userId = req.user?.userId;
+
+    const result = await ListingService.getTemporaryListingFromDB(
+      userId as string
+    );
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Temporary Listings retrieval successfully",
+      data: result,
+    });
+  }
+);
+
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, listingFilterableFields);
   const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
@@ -75,4 +92,5 @@ export const ListingController = {
   getAllFromDB,
   getListingById,
   deleteListing,
+  getTemporaryListing,
 };
