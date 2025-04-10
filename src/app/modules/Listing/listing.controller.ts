@@ -33,6 +33,25 @@ const createTemporaryListing = catchAsync(
   }
 );
 
+const createListing = catchAsync(
+  async (req: Request & { user?: { userId: string } }, res: Response) => {
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, "User not found");
+    }
+
+    const payload = req.body;
+    const result = await ListingService.createListingIntoDb(payload, userId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Listings created successfully",
+      data: result,
+    });
+  }
+);
+
 const getTemporaryListing = catchAsync(
   async (req: Request & { user?: { userId: string } }, res: Response) => {
     const userId = req.user?.userId;
@@ -93,4 +112,5 @@ export const ListingController = {
   getListingById,
   deleteListing,
   getTemporaryListing,
+  createListing,
 };

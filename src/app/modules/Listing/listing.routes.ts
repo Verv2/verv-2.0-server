@@ -27,6 +27,12 @@ router.post(
   ListingController.createTemporaryListing
 );
 
+router.post(
+  "/create-listing",
+  auth(UserRole.LANDLORD, UserRole.ADMIN),
+  ListingController.createListing
+);
+
 router.delete(
   "/:id",
   auth(UserRole.LANDLORD, UserRole.ADMIN),

@@ -108,13 +108,13 @@ model PropertyListing {
   remoteVideoViewing Boolean
   viewingDescription String?
   youtubeUrl         String?
-  sellingOption      SellingOptions
+  propertyFor        PropertyFor
 
   monthlyRent    Float
   minimumTenancy Int
   weeklyRent     Float
   maximumTenancy Int
-  depositAmount  Float
+  depositAmount  String
   moveInDate     String
 
   billsIncluded Boolean
@@ -128,11 +128,14 @@ model PropertyListing {
   petsAllowed       Boolean
   smokersAllowed    Boolean
 
-  termsAgreed Boolean
-  isRented    Boolean  @default(false)
-  isDeleted   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  termsAgreed   Boolean
+  planId        String
+  transactionId String
+
+  isRented  Boolean  @default(false)
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   landlord Landlord @relation(fields: [landlordId], references: [id])
 
@@ -184,7 +187,7 @@ enum FurnishingOptions {
   CHOICE
 }
 
-enum SellingOptions {
+enum PropertyFor {
   RENT
   SELL
 }

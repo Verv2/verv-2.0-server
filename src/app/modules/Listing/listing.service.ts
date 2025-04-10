@@ -4,6 +4,8 @@ import prisma from "../../../shared/prisma";
 import { IPaginationOptions } from "../../interfaces/pagination";
 import { listingSearchableFields } from "./listing.constant";
 import { TImageFiles } from "../Landlord/landlord.interface";
+import ApiError from "../../errors/ApiErrors";
+import httpStatus from "http-status";
 
 const createTemporaryListingIntoDb = async (
   payload: any,
@@ -41,6 +43,81 @@ const createTemporaryListingIntoDb = async (
       userId,
       data: mergedData,
       step: payload.step,
+    },
+  });
+
+  return result;
+};
+
+const createListingIntoDb = async (payload: IListing, userId: string) => {
+  const existingLandlord = await prisma.landlord.findUnique({
+    where: { userId },
+  });
+  if (!existingLandlord) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Landlord not found");
+  }
+
+  const temporaryProperty = await prisma.temporaryProperty.findUnique({
+    where: { userId },
+  });
+  if (!temporaryProperty) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Temporary property not found");
+  }
+
+  const { data: temporaryData } = temporaryProperty.data as any;
+  const { propertyImages } = temporaryProperty.data as any;
+
+  const listingData = {
+    landlordId: existingLandlord.id,
+    email: existingLandlord.email,
+    propertyOption: temporaryData?.propertyOption,
+    postcode: temporaryData?.propertyDetails?.postcode,
+    houseNumber: temporaryData?.propertyDetails?.houseNumber,
+    address: temporaryData?.propertyDetails?.address,
+    address2: temporaryData?.propertyDetails?.address2,
+    propertyType: temporaryData?.propertyDetails?.propertyType,
+    bedrooms: temporaryData?.propertyDetails?.bedrooms,
+    bathrooms: temporaryData?.propertyDetails?.bathrooms,
+    furnishingOptions: temporaryData?.propertyDetails?.furnishingOptions,
+    town: temporaryData?.propertyDetails?.town,
+    description: temporaryData?.propertyDetails?.description,
+
+    propertyImages: propertyImages,
+
+    remoteVideoViewing: temporaryData?.remoteVideoViewing,
+    viewingDescription: temporaryData?.viewingDescription,
+
+    monthlyRent: temporaryData?.tenancyDetails?.monthlyRent,
+    minimumTenancy: temporaryData?.tenancyDetails?.minimumTenancy,
+    weeklyRent: temporaryData?.tenancyDetails?.weeklyRent,
+    maximumTenancy: temporaryData?.tenancyDetails?.maximumTenancy,
+    depositAmount: temporaryData?.tenancyDetails?.depositAmount,
+    moveInDate: temporaryData?.tenancyDetails?.moveInDate,
+    billsIncluded: temporaryData?.features?.billsIncluded,
+    gardenAccess: temporaryData?.features?.gardenAccess,
+    parking: temporaryData?.features?.parking,
+    fireplace: temporaryData?.features?.fireplace,
+
+    studentAllowed: temporaryData?.tenantPreferences?.studentAllowed,
+    familiesAllowed: temporaryData?.tenantPreferences?.familiesAllowed,
+    dssIncomeAccepted: temporaryData?.tenantPreferences?.dssIncomeAccepted,
+    petsAllowed: temporaryData?.tenantPreferences?.petsAllowed,
+    smokersAllowed: temporaryData?.tenantPreferences?.smokersAllowed,
+
+    termsAgreed: temporaryData?.termsAgreed,
+
+    propertyFor: payload.propertyFor,
+    planId: payload.planId,
+    transactionId: payload.transactionId,
+  };
+
+  const result = await prisma.propertyListing.create({
+    data: listingData,
+  });
+
+  await prisma.temporaryProperty.delete({
+    where: {
+      userId: userId,
     },
   });
 
@@ -147,4 +224,5 @@ export const ListingService = {
   deleteListingFromDB,
   createTemporaryListingIntoDb,
   getTemporaryListingFromDB,
+  createListingIntoDb,
 };
