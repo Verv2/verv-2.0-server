@@ -42,9 +42,10 @@ const addPropertyIntoDB = async (
     propertyImages: arrImages,
   };
 
-  const result = await prisma.propertyListing.create({
-    data: propertyData,
-  });
+  // const result = await prisma.propertyListing.create({
+  //   data: propertyData,
+  // });
+  const result = { test: "test" };
 
   return result;
 };
