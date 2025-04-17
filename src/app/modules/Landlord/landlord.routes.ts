@@ -8,9 +8,27 @@ const router = express.Router();
 
 router.get(
   "/all-property",
-  auth(UserRole.TENANT, UserRole.LANDLORD, UserRole.ADMIN),
+  auth(
+    UserRole.TENANT,
+    UserRole.LANDLORD,
+    UserRole.ADMIN,
+    UserRole.SUPER_ADMIN
+  ),
   LandlordController.getAllFromDB
 );
+
+router.get(
+  "/all-landlord",
+  auth(
+    UserRole.TENANT,
+    UserRole.LANDLORD,
+    UserRole.ADMIN,
+    UserRole.SUPER_ADMIN
+  ),
+  LandlordController.getAllLandlord
+);
+
+router.get("/:id", LandlordController.getLandlordById);
 
 router.post(
   "/add-property",

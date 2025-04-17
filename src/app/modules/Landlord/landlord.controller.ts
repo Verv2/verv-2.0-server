@@ -42,13 +42,37 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Doctors retrieval successfully",
+    message: "Property retrieval successfully",
     meta: result.meta,
     data: result.data,
+  });
+});
+
+const getAllLandlord = catchAsync(async (req: Request, res: Response) => {
+  const result = await LandlordService.getAllLandlordFromDB();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Landlords retrieval successfully",
+    data: result,
+  });
+});
+
+const getLandlordById = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await LandlordService.getLandlordByIdFromDB(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Landlord retrieval successfully",
+    data: result,
   });
 });
 
 export const LandlordController = {
   addProperty,
   getAllFromDB,
+  getAllLandlord,
+  getLandlordById,
 };

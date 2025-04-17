@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Landlord, Prisma } from "@prisma/client";
 import { paginationHelper } from "../../../helpers/paginationHelper";
 import prisma from "../../../shared/prisma";
 import ApiError from "../../errors/ApiErrors";
@@ -109,7 +109,37 @@ const getAllFromDB = async (filters: any, options: IPaginationOptions) => {
   };
 };
 
+const getAllLandlordFromDB = async () => {
+  console.log("getAllLandlordFromDB called");
+  const result = await prisma.landlord.findMany({
+    include: { propertyListing: true },
+  });
+
+  return result;
+};
+
+const getLandlordByIdFromDB = async (
+  userId: string
+): Promise<Landlord | null> => {
+  const result = await prisma.landlord.findUnique({
+    where: {
+      userId: userId,
+    },
+    include: {
+      propertyListing: true,
+    },
+  });
+
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Landlord not found");
+  }
+
+  return result;
+};
+
 export const LandlordService = {
   addPropertyIntoDB,
   getAllFromDB,
+  getAllLandlordFromDB,
+  getLandlordByIdFromDB,
 };
