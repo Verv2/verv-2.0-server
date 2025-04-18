@@ -1,6 +1,3 @@
 export const listingSearchableFields: string[] = ["town"];
 
-export const listingFilterableFields: string[] = [
-  "searchTerm",
-  "sellingOption",
-];
+export const listingFilterableFields: string[] = ["searchTerm", "propertyFor"];
