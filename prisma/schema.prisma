@@ -12,6 +12,7 @@ model User {
   email             String     @unique
   password          String
   role              UserRole
+  profilePhoto      String?
   isProfileUpdated  Boolean    @default(false)
   status            UserStatus @default(ACTIVE)
   passwordChangedAt DateTime   @default(now())
