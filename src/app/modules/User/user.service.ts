@@ -88,6 +88,11 @@ const createUserProfileIntoDB = async (req: Request & { user?: IAuthUser }) => {
       createdData = await tx.landlord.create({
         data: userProfileData,
       });
+
+      // await tx.user.update({
+      //   where: { id: req.user?.userId },
+      //   data: { profilePhoto: req.file?.path || "" },
+      // });
     }
 
     if (req.user?.role === "ADMIN") {
@@ -114,6 +119,7 @@ const createUserProfileIntoDB = async (req: Request & { user?: IAuthUser }) => {
         },
         data: {
           isProfileUpdated: true,
+          profilePhoto: req.file?.path || "",
         },
       });
     }

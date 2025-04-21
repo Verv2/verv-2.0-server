@@ -45,21 +45,87 @@ model Landlord {
   @@map("landlord")
 }
 
-model Tenant {
-  id           String   @id @default(uuid())
-  userId       String   @unique
-  firstName    String
-  lastName     String
-  email        String   @unique
-  phoneNumber  String
-  profilePhoto String?
-  isDeleted    Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+// model Tenant {
+//   id           String   @id @default(uuid())
+//   userId       String   @unique
+//   firstName    String
+//   lastName     String
+//   email        String   @unique
+//   phoneNumber  String
+//   profilePhoto String?
+//   isDeleted    Boolean  @default(false)
+//   createdAt    DateTime @default(now())
+//   updatedAt    DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id])
+//   user User @relation(fields: [userId], references: [id])
+
+//   @@map("tenant")
+// }
+
+model Tenant {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  firstName         String
+  lastName          String
+  gender            Gender
+  email             String   @unique
+  phoneNumber       String
+  profilePhoto      String?
+  description       String
+  age               Int
+  budget            Float
+  isAvailable       Boolean
+  lookingIn         String[]
+  amenitiesRequired String[]
+  minAge            Int
+  maxAge            Int
+  // anyPets           Boolean
+  occupation        String
+
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  householdPreference HouseholdPreference?
+  Availability        Availability?
+  user                User                 @relation(fields: [userId], references: [id])
 
   @@map("tenant")
+}
+
+model Availability {
+  id       String @id @default(uuid())
+  tenantId String @unique
+
+  moveIn  String
+  minTerm String
+  maxTerm String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@map("availability")
+}
+
+model HouseholdPreference {
+  id         String  @id @default(uuid())
+  tenantId   String  @unique
+  isSmoker   Boolean @default(false)
+  isPetOwner Boolean @default(false)
+  occupation String
+  minAge     Int
+  maxAge     Int
+  gender     Gender
+
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@map("household_preference")
 }
 
 model Admin {
@@ -191,4 +257,9 @@ enum FurnishingOptions {
 enum PropertyFor {
   RENT
   SELL
+}
+
+enum Gender {
+  MALE
+  FEMALE
 }
