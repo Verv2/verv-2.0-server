@@ -75,7 +75,7 @@ model Tenant {
   age               Int
   minBudget         Float
   maxBudget         Float
-  isAvailable       Boolean
+  isAvailable       Boolean  @default(false)
   lookingIn         String[]
   amenitiesRequired String[]
   minAge            Int
@@ -263,4 +263,5 @@ enum PropertyFor {
 enum Gender {
   MALE
   FEMALE
+  OTHER
 }

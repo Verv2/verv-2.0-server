@@ -20,6 +20,17 @@ router.get(
 );
 
 router.get(
+  "/me",
+  auth(
+    UserRole.ADMIN,
+    UserRole.SUPER_ADMIN,
+    UserRole.LANDLORD,
+    UserRole.TENANT
+  ),
+  userController.getMe
+);
+
+router.get(
   "/:id",
   auth(
     UserRole.ADMIN,

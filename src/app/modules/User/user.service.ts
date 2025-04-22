@@ -167,9 +167,30 @@ const getUserByIdFromDB = async (id: string): Promise<User | null> => {
   return result;
 };
 
+const getMeFromDB = async (req: Request & { user?: IAuthUser }) => {
+  console.log("getMe function called");
+  console.log(req.user?.userId);
+
+  const user = await prisma.user.findUnique({
+    where: { id: req.user?.userId },
+  });
+
+  const returnedUser = {
+    id: user?.id,
+    email: user?.email,
+    role: user?.role,
+    profilePhoto: user?.profilePhoto,
+    isProfileUpdated: user?.isProfileUpdated,
+    status: user?.status,
+  };
+
+  return returnedUser;
+};
+
 export const userService = {
   registerUserIntoDB,
   createUserProfileIntoDB,
   getAllUsersFromDB,
   getUserByIdFromDB,
+  getMeFromDB,
 };
