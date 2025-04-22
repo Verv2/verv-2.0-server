@@ -65,15 +65,16 @@ model Landlord {
 model Tenant {
   id                String   @id @default(uuid())
   userId            String   @unique
+  email             String   @unique
   firstName         String
   lastName          String
-  gender            Gender
-  email             String   @unique
   phoneNumber       String
+  gender            Gender
   profilePhoto      String?
   description       String
   age               Int
-  budget            Float
+  minBudget         Float
+  maxBudget         Float
   isAvailable       Boolean
   lookingIn         String[]
   amenitiesRequired String[]
@@ -87,7 +88,7 @@ model Tenant {
   updatedAt DateTime @updatedAt
 
   householdPreference HouseholdPreference?
-  Availability        Availability?
+  availability        Availability?
   user                User                 @relation(fields: [userId], references: [id])
 
   @@map("tenant")
