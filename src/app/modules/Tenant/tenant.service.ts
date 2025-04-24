@@ -10,6 +10,8 @@ const createTenantProfileIntoDB = async (
     throw new Error("User information is missing.");
   }
 
+  console.log(req.body);
+
   const tenantProfileData = {
     userId: req.user.userId,
     email: req.user.email,
@@ -22,7 +24,7 @@ const createTenantProfileIntoDB = async (
     age: req.body.age,
     minBudget: req.body.minBudget,
     maxBudget: req.body.maxBudget,
-    isAvailable: req.body.isAvailable,
+    // isAvailable: req.body.isAvailable,
     lookingIn: req.body.lookingIn,
     amenitiesRequired: req.body.amenitiesRequired,
     minAge: req.body.minAge,

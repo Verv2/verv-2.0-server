@@ -119,6 +119,9 @@ const createUserProfileIntoDB = async (req: Request & { user?: IAuthUser }) => {
         },
         data: {
           isProfileUpdated: true,
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          phoneNumber: req.body.phoneNumber,
           profilePhoto: req.file?.path || "",
         },
       });
@@ -179,6 +182,9 @@ const getMeFromDB = async (req: Request & { user?: IAuthUser }) => {
     id: user?.id,
     email: user?.email,
     role: user?.role,
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    phoneNumber: user?.phoneNumber,
     profilePhoto: user?.profilePhoto,
     isProfileUpdated: user?.isProfileUpdated,
     status: user?.status,
