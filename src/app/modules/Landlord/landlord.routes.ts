@@ -31,6 +31,17 @@ router.get(
 router.get("/:id", LandlordController.getLandlordById);
 
 router.post(
+  "/create-landlord-profile",
+  auth(UserRole.LANDLORD),
+  multerUpload.single("image"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
+  LandlordController.createLandlordProfile
+);
+
+router.post(
   "/add-property",
   auth(UserRole.LANDLORD),
   multerUpload.fields([{ name: "propertyImages" }]),

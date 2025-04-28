@@ -6,6 +6,52 @@ import { IPaginationOptions } from "../../interfaces/pagination";
 import { TImageFiles, TLandlordUser, TProperty } from "./landlord.interface";
 import httpStatus from "http-status";
 import { propertySearchableFields } from "./landlord.constant";
+import { IAuthUser } from "../../interfaces/common";
+import { Request } from "express";
+
+const createLandlordProfileIntoDB = async (
+  req: Request & { user?: IAuthUser }
+) => {
+  console.log("createLandlordProfileIntoDB called");
+  if (!req.user) {
+    throw new Error("User information is missing.");
+  }
+
+  console.log(req.body);
+
+  const landlordProfileData = {
+    userId: req.user.userId,
+    email: req.user.email,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    phoneNumber: req.body.phoneNumber,
+    languages: req.body.languages,
+    profilePhoto: req.file?.path || null,
+  };
+
+  const result = await prisma.$transaction(async (tx) => {
+    const landlord = await tx.landlord.create({
+      data: landlordProfileData,
+    });
+
+    if (landlord) {
+      await tx.user.update({
+        where: { id: req.user?.userId },
+        data: {
+          isProfileUpdated: true,
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          phoneNumber: req.body.phoneNumber,
+          profilePhoto: req.file?.path || null,
+        },
+      });
+    }
+
+    return landlord;
+  });
+
+  return result;
+};
 
 const addPropertyIntoDB = async (
   user: TLandlordUser,
@@ -138,6 +184,7 @@ const getLandlordByIdFromDB = async (
 };
 
 export const LandlordService = {
+  createLandlordProfileIntoDB,
   addPropertyIntoDB,
   getAllFromDB,
   getAllLandlordFromDB,

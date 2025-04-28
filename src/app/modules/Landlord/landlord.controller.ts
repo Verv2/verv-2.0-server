@@ -9,6 +9,19 @@ import { IAuthUser } from "../../interfaces/common";
 import pick from "../../../shared/pick";
 import { propertyFilterableFields } from "./landlord.constant";
 
+const createLandlordProfile = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await LandlordService.createLandlordProfileIntoDB(req);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Landlord Profile is created successfully!",
+      data: result,
+    });
+  }
+);
+
 const addProperty = catchAsync(
   async (req: Request & { user?: IAuthUser }, res: Response) => {
     if (!req.files) {
@@ -71,6 +84,7 @@ const getLandlordById = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const LandlordController = {
+  createLandlordProfile,
   addProperty,
   getAllFromDB,
   getAllLandlord,
