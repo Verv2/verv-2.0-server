@@ -176,6 +176,8 @@ model PropertyListing {
   furnishingOptions  FurnishingOptions
   town               String
   description        String
+  latitude           Float?
+  longitude          Float?
   propertyImages     String[]
   remoteVideoViewing Boolean
   viewingDescription String?
@@ -204,6 +206,7 @@ model PropertyListing {
   planId        String
   transactionId String
 
+  isPopular Boolean  @default(false)
   isRented  Boolean  @default(false)
   isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())

@@ -81,6 +81,8 @@ const createListingIntoDb = async (payload: IListing, userId: string) => {
     furnishingOptions: temporaryData?.propertyDetails?.furnishingOptions,
     town: temporaryData?.propertyDetails?.town,
     description: temporaryData?.propertyDetails?.description,
+    latitude: temporaryData?.propertyDetails?.latitude,
+    longitude: temporaryData?.propertyDetails?.longitude,
 
     propertyImages: propertyImages,
 
