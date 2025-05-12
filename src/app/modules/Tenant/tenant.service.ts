@@ -5,7 +5,6 @@ import prisma from "../../../shared/prisma";
 const createTenantProfileIntoDB = async (
   req: Request & { user?: IAuthUser }
 ) => {
-  console.log("createTenantProfileIntoDB called");
   if (!req.user) {
     throw new Error("User information is missing.");
   }
@@ -70,6 +69,53 @@ const createTenantProfileIntoDB = async (
   return result;
 };
 
+const createRentNowTenantInfo = async (req: Request & { user?: IAuthUser }) => {
+  if (!req.user) {
+    throw new Error("User information is missing.");
+  }
+
+  const tenants = req.body.data;
+
+  if (!Array.isArray(tenants) || tenants.length === 0) {
+    throw new Error("Tenants array is required.");
+  }
+
+  const tenant = await prisma.tenant.findUnique({
+    where: { userId: req.user.userId },
+  });
+
+  if (!tenant) {
+    throw new Error("Tenant not found.");
+  }
+
+  const { id: tenantId } = tenant;
+
+  // console.log("tenant Id", tenantId);
+
+  // console.log(tenants);
+  // console.log(req.user);
+
+  const results = await Promise.all(
+    tenants.map(async (tenant) => {
+      return await prisma.rentNowTenantInfo.create({
+        data: {
+          referredByTenantId: tenantId,
+          userId: req?.user?.userId as string,
+          email: tenant.email,
+          fullName: tenant.fullName,
+          phoneNumber: tenant.phoneNumber,
+          description: tenant.description || "",
+          moveInDate: tenant.moveInDate,
+          propertyId: tenant.propertyId,
+        },
+      });
+    })
+  );
+
+  return results;
+};
+
 export const TenantService = {
   createTenantProfileIntoDB,
+  createRentNowTenantInfo,
 };

@@ -15,6 +15,18 @@ const createTenantProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const rentNowTenantInfo = catchAsync(async (req: Request, res: Response) => {
+  const result = await TenantService.createRentNowTenantInfo(req);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Referenced tenants has been added",
+    data: result,
+  });
+});
+
 export const TenantController = {
   createTenantProfile,
+  rentNowTenantInfo,
 };

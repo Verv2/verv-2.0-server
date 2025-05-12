@@ -17,4 +17,10 @@ router.post(
   TenantController.createTenantProfile
 );
 
+router.post(
+  "/rent-now-tenant-info",
+  auth(UserRole.TENANT),
+  TenantController.rentNowTenantInfo
+);
+
 export const TenantRoutes = router;
