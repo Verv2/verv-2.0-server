@@ -70,9 +70,17 @@ const getTemporaryListing = catchAsync(
 );
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
-  const filters = pick(req.query, listingFilterableFields);
-  const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
+  const rawFilters = pick(req.query, listingFilterableFields);
+  const filters = {
+    ...rawFilters,
+    bedrooms: rawFilters.bedrooms ? Number(rawFilters.bedrooms) : undefined,
+    monthlyRent: rawFilters.monthlyRent
+      ? Number(rawFilters.monthlyRent)
+      : undefined,
+  };
 
+  // const filters = pick(req.query, listingFilterableFields);
+  const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
   const result = await ListingService.getListingAllFromDB(filters, options);
 
   sendResponse(res, {
