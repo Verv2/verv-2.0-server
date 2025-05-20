@@ -8,20 +8,22 @@ datasource db {
 }
 
 model User {
-  id                String     @id @default(uuid())
-  email             String     @unique
+  id                String        @id @default(uuid())
+  email             String        @unique
   password          String
-  role              UserRole
+  role              UserRole      @default(USER)
   firstName         String?
   lastName          String?
   phoneNumber       String?
   profilePhoto      String?
-  isProfileUpdated  Boolean    @default(false)
-  isVerified        Boolean    @default(false)
-  status            UserStatus @default(ACTIVE)
-  passwordChangedAt DateTime   @default(now())
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @updatedAt
+  isProfileUpdated  Boolean       @default(false)
+  isVerified        Boolean       @default(false)
+  status            UserStatus    @default(ACTIVE)
+  provider          UserProviders @default(local)
+  passwordChangedAt DateTime      @default(now())
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  isDeleted         Boolean       @default(false)
   landlord          Landlord?
   tenant            Tenant?
   admin             Admin?
@@ -241,12 +243,19 @@ enum UserRole {
   ADMIN
   LANDLORD
   TENANT
+  USER
 }
 
 enum UserStatus {
   ACTIVE
   BLOCKED
   DELETED
+}
+
+enum UserProviders {
+  local
+  google
+  facebook
 }
 
 // enum PropertyOption {

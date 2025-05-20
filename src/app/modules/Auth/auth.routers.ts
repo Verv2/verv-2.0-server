@@ -1,9 +1,17 @@
 import express from "express";
 import { AuthController } from "./auth.controller";
+import { AuthValidation } from "./auth.validation";
+import validateRequest from "../../middlewares/validateRequest";
 
 const router = express.Router();
 
 router.post("/login", AuthController.loginUser);
+
+router.post(
+  "/login-social-media",
+  validateRequest(AuthValidation.loginSocialMediaValidationSchema),
+  AuthController.logInWithSocialMedia
+);
 
 router.post("/refresh-token", AuthController.refreshToken);
 

@@ -42,7 +42,8 @@ const createLandlordProfileIntoDB = async (
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           phoneNumber: req.body.phoneNumber,
-          profilePhoto: req.file?.path || null,
+          profilePhoto: req.file?.path,
+          role: "LANDLORD",
         },
       });
     }

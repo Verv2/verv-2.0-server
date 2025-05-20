@@ -14,7 +14,8 @@ router.get(
     UserRole.ADMIN,
     UserRole.SUPER_ADMIN,
     UserRole.LANDLORD,
-    UserRole.TENANT
+    UserRole.TENANT,
+    UserRole.USER
   ),
   userController.getAllUsers
 );
@@ -25,7 +26,8 @@ router.get(
     UserRole.ADMIN,
     UserRole.SUPER_ADMIN,
     UserRole.LANDLORD,
-    UserRole.TENANT
+    UserRole.TENANT,
+    UserRole.USER
   ),
   userController.getMe
 );
@@ -36,7 +38,8 @@ router.get(
     UserRole.ADMIN,
     UserRole.SUPER_ADMIN,
     UserRole.LANDLORD,
-    UserRole.TENANT
+    UserRole.TENANT,
+    UserRole.USER
   ),
   userController.getUserById
 );
@@ -53,7 +56,8 @@ router.post(
     UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.LANDLORD,
-    UserRole.TENANT
+    UserRole.TENANT,
+    UserRole.USER
   ),
   multerUpload.single("image"),
   (req: Request, res: Response, next: NextFunction) => {
