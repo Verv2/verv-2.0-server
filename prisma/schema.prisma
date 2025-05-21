@@ -157,10 +157,12 @@ model PropertyListing {
   address            String
   address2           String?
   propertyType       PropertyType
+  size               Float
   bedrooms           Int
   bathrooms          Int
   furnishingOptions  FurnishingOptions
   town               String
+  district           String
   description        String
   latitude           Float?
   longitude          Float?

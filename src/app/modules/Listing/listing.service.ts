@@ -2,7 +2,7 @@ import { Prisma, PropertyListing } from "@prisma/client";
 import { paginationHelper } from "../../../helpers/paginationHelper";
 import prisma from "../../../shared/prisma";
 import { IPaginationOptions } from "../../interfaces/pagination";
-import { listingSearchableFields } from "./listing.constant";
+import { booleanFields, listingSearchableFields } from "./listing.constant";
 import { TImageFiles } from "../Landlord/landlord.interface";
 import ApiError from "../../errors/ApiErrors";
 import httpStatus from "http-status";
@@ -80,6 +80,8 @@ const createListingIntoDb = async (payload: IListing, userId: string) => {
     bathrooms: temporaryData?.propertyDetails?.bathrooms,
     furnishingOptions: temporaryData?.propertyDetails?.furnishingOptions,
     town: temporaryData?.propertyDetails?.town,
+    district: temporaryData?.propertyDetails?.district,
+    size: temporaryData?.propertyDetails?.size,
     description: temporaryData?.propertyDetails?.description,
     latitude: temporaryData?.propertyDetails?.latitude,
     longitude: temporaryData?.propertyDetails?.longitude,
@@ -139,7 +141,14 @@ const getListingAllFromDB = async (
   options: IPaginationOptions
 ) => {
   const { limit, page, skip } = paginationHelper.calculatePagination(options);
-  const { searchTerm, ...filterData } = filters;
+  const {
+    searchTerm,
+    minBedrooms,
+    maxBedrooms,
+    minMonthlyRent,
+    maxMonthlyRent,
+    ...filterData
+  } = filters;
 
   const andConditions: Prisma.PropertyListingWhereInput[] = [];
 
@@ -154,7 +163,47 @@ const getListingAllFromDB = async (
     });
   }
 
+  // for range of filtering
+  if (minBedrooms && maxBedrooms) {
+    andConditions.push({
+      bedrooms: {
+        gte: Number(minBedrooms),
+        lte: Number(maxBedrooms),
+      },
+    });
+  }
+
+  if (minMonthlyRent && maxMonthlyRent) {
+    andConditions.push({
+      monthlyRent: {
+        gte: Number(minMonthlyRent),
+        lte: Number(maxMonthlyRent),
+      },
+    });
+  }
+
+  for (const key in filterData) {
+    if (booleanFields.includes(key) && typeof filterData[key] === "string") {
+      if (filterData[key] === "true") {
+        filterData[key] = true;
+      } else if (filterData[key] === "false") {
+        filterData[key] = false;
+      }
+    }
+  }
+
   if (Object.keys(filterData).length > 0) {
+    // if (
+    //   typeof filterData.billsIncluded === "string" &&
+    //   filterData.billsIncluded === "true"
+    // ) {
+    //   filterData.billsIncluded = true;
+    // } else if (
+    //   typeof filterData.billsIncluded === "string" &&
+    //   filterData.billsIncluded === "false"
+    // ) {
+    //   filterData.billsIncluded = false;
+    // }
     andConditions.push({
       AND: Object.keys(filterData).map((key) => {
         return {

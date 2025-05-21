@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "property_listing" ADD COLUMN     "district" TEXT NOT NULL DEFAULT 'A',
+ADD COLUMN     "size" DOUBLE PRECISION NOT NULL DEFAULT 0;
