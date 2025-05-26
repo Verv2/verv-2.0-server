@@ -1,4 +1,8 @@
-export const listingSearchableFields: string[] = ["town", "postcode"];
+export const listingSearchableFields: string[] = [
+  "town",
+  "postcode",
+  "district",
+];
 
 export const listingFilterableFields: string[] = [
   "searchTerm",
@@ -10,13 +14,26 @@ export const listingFilterableFields: string[] = [
   "minBedrooms",
   "maxBedrooms",
   "propertyType",
+  "furnishingOptions",
   "billsIncluded",
   "gardenAccess",
+  "parking",
+  "fireplace",
   "studentAllowed",
+  "familiesAllowed",
+  "dssIncomeAccepted",
+  "petsAllowed",
+  "smokersAllowed",
 ];
 
 export const booleanFields = [
   "billsIncluded",
   "gardenAccess",
+  "parking",
+  "fireplace",
   "studentAllowed",
+  "familiesAllowed",
+  "dssIncomeAccepted",
+  "petsAllowed",
+  "smokersAllowed",
 ];
