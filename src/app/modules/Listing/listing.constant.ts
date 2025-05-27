@@ -2,6 +2,7 @@ export const listingSearchableFields: string[] = [
   "town",
   "postcode",
   "district",
+  // "description",
 ];
 
 export const listingFilterableFields: string[] = [
@@ -24,6 +25,9 @@ export const listingFilterableFields: string[] = [
   "dssIncomeAccepted",
   "petsAllowed",
   "smokersAllowed",
+  "lat",
+  "lon",
+  "maxDistance",
 ];
 
 export const booleanFields = [

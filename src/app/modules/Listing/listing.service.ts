@@ -147,6 +147,9 @@ const getListingAllFromDB = async (
     maxBedrooms,
     minMonthlyRent,
     maxMonthlyRent,
+    lat,
+    lon,
+    maxDistance,
     ...filterData
   } = filters;
 
@@ -193,17 +196,6 @@ const getListingAllFromDB = async (
   }
 
   if (Object.keys(filterData).length > 0) {
-    // if (
-    //   typeof filterData.billsIncluded === "string" &&
-    //   filterData.billsIncluded === "true"
-    // ) {
-    //   filterData.billsIncluded = true;
-    // } else if (
-    //   typeof filterData.billsIncluded === "string" &&
-    //   filterData.billsIncluded === "false"
-    // ) {
-    //   filterData.billsIncluded = false;
-    // }
     andConditions.push({
       AND: Object.keys(filterData).map((key) => {
         return {
@@ -220,6 +212,57 @@ const getListingAllFromDB = async (
 
   const whereConditions: Prisma.PropertyListingWhereInput =
     andConditions.length > 0 ? { AND: andConditions } : {};
+
+  if (lat && lon) {
+    const distanceFilter = maxDistance
+      ? Prisma.sql`HAVING distance <= ${maxDistance}`
+      : Prisma.empty;
+
+    const rawQuery = Prisma.sql`
+      SELECT *, (
+        6371 * acos(
+          cos(radians(${Number(
+            lat
+          )})) * cos(radians("latitude"::double precision)) *
+          cos(radians("longitude"::double precision) - radians(${Number(
+            lon
+          )})) +
+          sin(radians(${Number(
+            lat
+          )})) * sin(radians("latitude"::double precision))
+        )
+      ) AS distance
+      FROM "property_listing"
+      WHERE "isDeleted" = false
+      ${distanceFilter}
+      ORDER BY distance ASC
+      LIMIT ${limit}
+      OFFSET ${skip};
+`;
+
+    const data: any = await prisma.$queryRaw(rawQuery);
+
+    const total = await prisma.propertyListing.count({
+      where: whereConditions, // You may still count with original filters
+    });
+
+    return {
+      meta: {
+        total,
+        page,
+        limit,
+      },
+      data,
+    };
+
+    // whereConditions.AND = [
+    //   ...(whereConditions.AND || []),
+    //   Prisma.sql`ST_Distance_Sphere(
+    //     point(${lon}, ${lat}),
+    //     point(longitude, latitude)
+    //   ) <= ${maxDistance}`,
+    // ];
+  }
 
   const result = await prisma.propertyListing.findMany({
     where: whereConditions,
