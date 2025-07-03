@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "prod": "NODE_ENV=production node ./dist/server.js",
+    "seed": "ts-node-dev --respawn --transpile-only prisma/seed.ts",
     "migrate": "npx prisma migrate dev",
     "build": "tsc",
     "postinstall": "prisma generate"
